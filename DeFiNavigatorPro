@@ -1,0 +1,119 @@
+# DeFiNavigatorPro.py
+
+import json
+import random
+from typing import List, Dict
+
+class DeFiNavigatorPro:
+    def __init__(self, platform_name: str, supported_protocols: List[str]):
+        self.platform_name = platform_name
+        self.supported_protocols = supported_protocols
+        self.protocol_data = {}
+
+    def display_platform_info(self):
+        """Displays the platform name and supported DeFi protocols."""
+        print(f"Platform Name: {self.platform_name}")
+        print("Supported DeFi Protocols:")
+        for protocol in self.supported_protocols:
+            print(f"- {protocol}")
+
+    def add_protocol(self, protocol_name: str):
+        """
+        Adds a new DeFi protocol to the platform.
+        """
+        if protocol_name in self.protocol_data:
+            print(f"Protocol '{protocol_name}' already exists.")
+            return
+        
+        self.protocol_data[protocol_name] = {
+            'total_value_locked': random.uniform(1e6, 1e9),
+            'annual_yield': random.uniform(0.01, 0.2),
+            'users': random.randint(1000, 50000),
+            'transactions': []
+        }
+        print(f"Protocol '{protocol_name}' added successfully.")
+
+    def record_transaction(self, protocol_name: str, amount: float, user: str):
+        """
+        Records a transaction for a specific DeFi protocol.
+        """
+        if protocol_name not in self.protocol_data:
+            print(f"Protocol '{protocol_name}' does not exist.")
+            return
+
+        transaction = {
+            'user': user,
+            'amount': amount,
+            'transaction_id': random.randint(100000, 999999)
+        }
+        self.protocol_data[protocol_name]['transactions'].append(transaction)
+        print(f"Recorded transaction for '{protocol_name}': {transaction}")
+
+    def get_protocol_info(self, protocol_name: str) -> Dict:
+        """
+        Retrieves information about a specific DeFi protocol.
+        """
+        if protocol_name not in self.protocol_data:
+            print(f"Protocol '{protocol_name}' does not exist.")
+            return {}
+        
+        return self.protocol_data[protocol_name]
+
+    def calculate_yield(self, protocol_name: str, investment_amount: float) -> float:
+        """
+        Calculates the potential yield for a given investment in a DeFi protocol.
+        """
+        if protocol_name not in self.protocol_data:
+            print(f"Protocol '{protocol_name}' does not exist.")
+            return 0.0
+        
+        protocol = self.protocol_data[protocol_name]
+        annual_yield = protocol['annual_yield']
+        yield_amount = investment_amount * annual_yield
+        return yield_amount
+
+    def generate_report(self) -> Dict:
+        """
+        Generates a comprehensive report of all DeFi protocols and their details.
+        """
+        report = {
+            'platform_name': self.platform_name,
+            'protocols': self.protocol_data
+        }
+        return report
+
+    def display_report(self, report: Dict):
+        """Displays the generated report."""
+        print("Generated DeFi Report:")
+        print(json.dumps(report, indent=4))
+
+# Example usage
+if __name__ == "__main__":
+    platform_name = "DeFiNavigatorPro"
+    supported_protocols = ["Uniswap", "Aave", "Compound", "SushiSwap"]
+
+    # Create an instance of DeFiNavigatorPro
+    defi_navigator = DeFiNavigatorPro(platform_name, supported_protocols)
+    
+    # Display platform info
+    defi_navigator.display_platform_info()
+
+    # Add and record transactions for protocols
+    defi_navigator.add_protocol("Uniswap")
+    defi_navigator.add_protocol("Aave")
+
+    defi_navigator.record_transaction("Uniswap", 5000.0, "User1")
+    defi_navigator.record_transaction("Aave", 2000.0, "User2")
+
+    # Get protocol info
+    uniswap_info = defi_navigator.get_protocol_info("Uniswap")
+    print("Uniswap Info:", json.dumps(uniswap_info, indent=4))
+
+    # Calculate yield
+    investment_amount = 10000.0
+    yield_amount = defi_navigator.calculate_yield("Uniswap", investment_amount)
+    print(f"Potential yield for ${investment_amount} in Uniswap: ${yield_amount:.2f}")
+
+    # Generate and display report
+    report = defi_navigator.generate_report()
+    defi_navigator.display_report(report)
